@@ -1,12 +1,14 @@
+import { TouchClip } from "../domain";
+
 const usePaginatedClipsFetcher = () => {
   return fetchClipsGenerator();
 };
 
 export default usePaginatedClipsFetcher;
 
-function* fetchClipsGenerator(): Generator<string> {
+function* fetchClipsGenerator(): Generator<TouchClip> {
   while (true) {
-    yield getRandomClipUrl();
+    yield getRandomTouch();
   }
 }
 
@@ -36,10 +38,11 @@ const HARD_CODED_VIDEO_NAMES = [
 
 const CN_VIDEO_BASE_URL = "https://d2fqimnt2xbeir.cloudfront.net";
 
-export const getRandomClipUrl = () => {
-  const randomClipId =
+export const getRandomTouch = (): TouchClip => {
+  const clipId =
     HARD_CODED_VIDEO_NAMES[
       Math.floor(Math.random() * HARD_CODED_VIDEO_NAMES.length)
     ];
-  return `${CN_VIDEO_BASE_URL}/${randomClipId}`;
+  const clipUrl = `${CN_VIDEO_BASE_URL}/${clipId}`;
+  return { clipId, clipUrl };
 };

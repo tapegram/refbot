@@ -17,15 +17,16 @@ The hope is that
 Currently implementing this entirely as a frontend app with no state, but providing hooks to wire in a real backend in the near future
 
 - Introduce fake user concept
-- Record decisions for users
+- Record use specific decisions
 - Display decisions compared to other users
 - Login/signup flow
 - Introduce comment section to facilitate arguing
 - Consider more fine-grained decisions (None, is a pretty unhelpful catch-all)
-- Fetch random clips from server instead of short hardcoded list
 - Consider using a fun styled component library instead of just practicing CSS.
+- Move all of the fake frontend stuff to the backend
 
 ## Done
 
 - Deploy on internet
 - Setup CI/CD
+- Record decisions
