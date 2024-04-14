@@ -25,3 +25,4 @@ Currently implementing this entirely as a frontend app with no state, but provid
 - Fetch random clips from server instead of short hardcoded list
 - Deploy on internet
 - Setup CI/CD
+- Consider using a fun styled component library instead of just practicing CSS.
