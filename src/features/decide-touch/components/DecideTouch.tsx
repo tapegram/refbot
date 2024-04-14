@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Decision, getRandomClipUrl } from "../domain";
+import { Decision } from "../domain";
+import usePaginatedClipsFetcher from "../hooks/usePaginatedClipsFetcher";
 
 const DecideTouch = () => {
-  const [currentClip, setCurrentClip] = useState<string>(getRandomClipUrl());
+  const clips = usePaginatedClipsFetcher();
+  const [currentClip, setCurrentClip] = useState<string>(clips.next().value);
 
-  const handleDecisionClick = (decision: Decision) => {
-    console.log(decision);
-    setCurrentClip(getRandomClipUrl());
+  const handleDecisionClick = (_decision: Decision) => {
+    const clip = clips.next().value;
+    setCurrentClip(clip);
   };
 
   return (
