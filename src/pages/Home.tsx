@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 /**
  * Should be eventually moved to the backend with dynamic list of values.
  * Before that, we could hide this behind a hook faking a backend call.
@@ -32,20 +34,27 @@ const getRandomClipUrl = () => {
   return `${CN_VIDEO_BASE_URL}/${randomClipId}`;
 };
 
+type Decision = "left" | "none" | "right";
+
 const Home = () => {
-  const videoSource = getRandomClipUrl();
+  const [currentClip, setCurrentClip] = useState<string>(getRandomClipUrl());
+
+  const handleDecisionClick = (decision: Decision) => {
+    console.log(decision);
+    setCurrentClip(getRandomClipUrl());
+  };
 
   return (
     <div>
       <div className="videoContainer">
-        <video controls loop autoPlay muted>
-          <source src={videoSource} type="video/mp4" />
+        <video key={currentClip} controls loop autoPlay muted>
+          <source src={currentClip} type="video/mp4" />
         </video>
       </div>
       <div className="decisionContainer">
-        <button>Left</button>
-        <button>None</button>
-        <button>Right</button>
+        <button onClick={() => handleDecisionClick("left")}>Left</button>
+        <button onClick={() => handleDecisionClick("none")}>None</button>
+        <button onClick={() => handleDecisionClick("right")}>Right</button>
       </div>
     </div>
   );
