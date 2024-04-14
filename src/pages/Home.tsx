@@ -27,7 +27,7 @@ const CN_VIDEO_BASE_URL = "https://d2fqimnt2xbeir.cloudfront.net";
 const getRandomClipUrl = () => {
   const randomClipId =
     HARD_CODED_VIDEO_NAMES[
-    Math.floor(Math.random() * HARD_CODED_VIDEO_NAMES.length)
+      Math.floor(Math.random() * HARD_CODED_VIDEO_NAMES.length)
     ];
   return `${CN_VIDEO_BASE_URL}/${randomClipId}`;
 };
@@ -37,9 +37,16 @@ const Home = () => {
 
   return (
     <div>
-      <video width="800" height="500" controls loop autoPlay muted>
-        <source src={videoSource} type="video/mp4" />
-      </video>
+      <div className="videoContainer">
+        <video controls loop autoPlay muted>
+          <source src={videoSource} type="video/mp4" />
+        </video>
+      </div>
+      <div className="decisionContainer">
+        <button>Left</button>
+        <button>None</button>
+        <button>Right</button>
+      </div>
     </div>
   );
 };
