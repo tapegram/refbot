@@ -16,15 +16,11 @@ The hope is that
 
 Currently implementing this entirely as a frontend app with no state, but providing hooks to wire in a real backend in the near future
 
-- Return user specific data in the decisions summary
-- Update video flow to display summary info after making a decision and before moving to the next clip
-- Record use specific decisions
-- Display decisions compared to other users
 - Login/signup flow
-- Introduce comment section to facilitate arguing
 - Consider more fine-grained decisions (None, is a pretty unhelpful catch-all)
 - Consider using a fun styled component library instead of just practicing CSS.
 - Move all of the fake frontend stuff to the backend
+- Introduce comment section to facilitate arguing
 
 ## Done
 
@@ -34,3 +30,6 @@ Currently implementing this entirely as a frontend app with no state, but provid
 - Do some slightly hacky buffering of videos to not get gross flashing when moving to the next clip
 - Create Auth Context and hard code in a User
 - Use the above context to report user specific decisions
+- Update video flow to display summary info after making a decision and before moving to the next clip
+- Record use specific decisions
+- Display decisions compared to other users

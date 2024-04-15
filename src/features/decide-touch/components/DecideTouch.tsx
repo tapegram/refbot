@@ -1,5 +1,13 @@
 import { useContext, useState } from "react";
-import { ClipDecision, Decision, TouchClip } from "../domain";
+import {
+  ClipDecision,
+  Decision,
+  DecisionSummary,
+  TouchClip,
+  percentLeft,
+  percentNone,
+  percentRight,
+} from "../domain";
 import usePaginatedClipsFetcher from "../hooks/usePaginatedClipsFetcher";
 import useDecision from "../hooks/useMakeDecision";
 import AuthContext from "../../users/hooks/createAuthContext";
@@ -18,6 +26,8 @@ const DecideTouch = () => {
   const [currClip, setCurrClip] = useState<CurrClip>("A");
   const [getDecisions, makeDecision] = useDecision();
   const authContext = useContext(AuthContext);
+  const [decisionSummary, setDecisionSummary] =
+    useState<DecisionSummary | null>(null);
 
   const getCurrentClip = () => (currClip == "A" ? clipA : clipB);
 
@@ -46,9 +56,11 @@ const DecideTouch = () => {
 
     makeDecision(clipDecision);
 
-    // Print out the current summaries
-    console.log(JSON.stringify(getDecisions(clipDecision.clipId)));
+    setDecisionSummary(getDecisions(clipDecision.userId, clipDecision.clipId));
+  };
 
+  const handleNextClick = () => {
+    setDecisionSummary(null);
     // Switch to the other clip and preload the next one
     toggleCurrClip();
   };
@@ -62,11 +74,15 @@ const DecideTouch = () => {
         hidden={currClip !== "A"}
         clip={clipA}
         handleDecisionClick={handleDecisionClick}
+        decisionSummary={decisionSummary}
+        handleNextClick={handleNextClick}
       />
       <DecideTouchImpl
         hidden={currClip !== "B"}
         clip={clipB}
         handleDecisionClick={handleDecisionClick}
+        decisionSummary={decisionSummary}
+        handleNextClick={handleNextClick}
       />
     </>
   );
@@ -76,12 +92,16 @@ type DecideTouchImplProps = {
   hidden: boolean;
   clip: TouchClip;
   handleDecisionClick: (decision: Decision) => void;
+  handleNextClick: () => void;
+  decisionSummary: DecisionSummary | null;
 };
 
 const DecideTouchImpl = ({
   hidden,
   clip,
   handleDecisionClick,
+  handleNextClick,
+  decisionSummary,
 }: DecideTouchImplProps) => (
   <div hidden={hidden}>
     <div className="videoContainer">
@@ -97,11 +117,24 @@ const DecideTouchImpl = ({
         <source src={clip.clipUrl} type="video/mp4" />
       </video>
     </div>
-    <div className="decisionContainer">
-      <button onClick={() => handleDecisionClick("left")}>Left</button>
-      <button onClick={() => handleDecisionClick("none")}>None</button>
-      <button onClick={() => handleDecisionClick("right")}>Right</button>
-    </div>
+    {decisionSummary ? (
+      <>
+        <div className="decisionContainer">
+          <button disabled>Left - {percentLeft(decisionSummary)}%</button>
+          <button disabled>None - {percentNone(decisionSummary)}%</button>
+          <button disabled>Right - {percentRight(decisionSummary)}%</button>
+        </div>
+        <button className="nextButton" onClick={handleNextClick}>
+          Next
+        </button>
+      </>
+    ) : (
+      <div className="decisionContainer">
+        <button onClick={() => handleDecisionClick("left")}>Left</button>
+        <button onClick={() => handleDecisionClick("none")}>None</button>
+        <button onClick={() => handleDecisionClick("right")}>Right</button>
+      </div>
+    )}
   </div>
 );
 
