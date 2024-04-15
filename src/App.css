@@ -54,7 +54,7 @@
 }
 
 .videoContainer {
-  // Setting min-width and min-height to the screen size doesn't change when loading a video
+  /* Setting min-width and min-height to the screen size doesn't change when loading a video */
   min-width: 100%;
   min-height: 100%;
 }
