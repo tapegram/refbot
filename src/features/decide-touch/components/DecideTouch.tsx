@@ -27,7 +27,15 @@ const DecideTouch = () => {
   return (
     <div>
       <div className="videoContainer">
-        <video key={currentClip.clipId} controls loop autoPlay muted>
+        <video
+          key={currentClip.clipId}
+          controls
+          loop
+          autoPlay
+          muted
+          webkit-playsinline
+          playsInline
+        >
           <source src={currentClip.clipUrl} type="video/mp4" />
         </video>
       </div>
