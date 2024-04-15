@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ClipDecision, Decision, TouchClip } from "../domain";
 import usePaginatedClipsFetcher from "../hooks/usePaginatedClipsFetcher";
 import useDecision from "../hooks/useMakeDecision";
+import AuthContext from "../../users/hooks/createAuthContext";
+import { getUserId } from "../../users/domain";
 
 type CurrClip = "A" | "B";
 /**
@@ -15,6 +17,7 @@ const DecideTouch = () => {
   const [clipB, setClipB] = useState<TouchClip>(clips.next().value);
   const [currClip, setCurrClip] = useState<CurrClip>("A");
   const [getDecisions, makeDecision] = useDecision();
+  const authContext = useContext(AuthContext);
 
   const getCurrentClip = () => (currClip == "A" ? clipA : clipB);
 
@@ -38,7 +41,9 @@ const DecideTouch = () => {
     const clipDecision: ClipDecision = {
       decision,
       clipId: clip.clipId,
+      userId: getUserId(authContext),
     };
+
     makeDecision(clipDecision);
 
     // Print out the current summaries
