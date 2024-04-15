@@ -16,7 +16,10 @@ The hope is that
 
 Currently implementing this entirely as a frontend app with no state, but providing hooks to wire in a real backend in the near future
 
-- Introduce fake user concept
+- Create Auth Context and hard code in a User
+- Use the above context to report user specific decisions
+- Return user specific data in the decisions summary
+- Update video flow to display summary info after making a decision and before moving to the next clip
 - Record use specific decisions
 - Display decisions compared to other users
 - Login/signup flow
@@ -30,3 +33,4 @@ Currently implementing this entirely as a frontend app with no state, but provid
 - Deploy on internet
 - Setup CI/CD
 - Record decisions
+- Do some slightly hacky buffering of videos to not get gross flashing when moving to the next clip
