@@ -16,6 +16,7 @@ The hope is that
 
 Currently implementing this entirely as a frontend app with no state, but providing hooks to wire in a real backend in the near future
 
+- Add more fine grained options for decisions
 - Login/signup flow
 - Consider more fine-grained decisions (None, is a pretty unhelpful catch-all)
 - Consider using a fun styled component library instead of just practicing CSS.

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useReducer } from "react";
 import {
   ClipDecision,
   Decision,
@@ -14,55 +14,114 @@ import AuthContext from "../../users/hooks/createAuthContext";
 import { getUserId } from "../../users/domain";
 
 type CurrClip = "A" | "B";
+
+type State = {
+  clipA: TouchClip;
+  clipB: TouchClip;
+  currClip: CurrClip;
+  decisionSummary: DecisionSummary | null;
+  clips: Generator<TouchClip>;
+  userId: string;
+  getDecisions: (userId: string, clipId: string) => DecisionSummary;
+  makeDecision: (decision: ClipDecision) => void;
+};
+
+function setClipA(clip: TouchClip, state: State) {
+  return { ...state, clipA: clip };
+}
+
+function setClipB(clip: TouchClip, state: State) {
+  return { ...state, clipB: clip };
+}
+
+function getCurrentClip({ currClip, clipA, clipB }: State) {
+  return currClip == "A" ? clipA : clipB;
+}
+
+function initialState(
+  userId: string,
+  clips: Generator<TouchClip>,
+  getDecisions: (userId: string, clipId: string) => DecisionSummary,
+  makeDecision: (decision: ClipDecision) => void,
+): State {
+  return {
+    clipA: clips.next().value,
+    clipB: clips.next().value,
+    currClip: "A",
+    decisionSummary: null,
+    clips,
+    userId,
+    getDecisions,
+    makeDecision,
+  };
+}
+
+type Action =
+  | { type: "toggle_curr_clip" }
+  | { type: "make_decision"; decision: Decision };
+
+function reducer(state: State, action: Action): State {
+  if (action.type === "toggle_curr_clip") {
+    const { currClip, clips } = state;
+    const nextClip = currClip == "A" ? "B" : "A";
+    const prevClip = currClip;
+
+    const nextState: State = {
+      ...state,
+      decisionSummary: null,
+      currClip: nextClip,
+    };
+
+    return prevClip === "A"
+      ? setClipA(clips.next().value, nextState)
+      : setClipB(clips.next().value, nextState);
+  }
+
+  if (action.type === "make_decision") {
+    const { decision } = action;
+    const clip = getCurrentClip(state);
+    const { userId, getDecisions, makeDecision } = state;
+
+    // Report this decision to the server
+    const clipDecision: ClipDecision = {
+      decision,
+      clipId: clip.clipId,
+      userId,
+    };
+
+    makeDecision(clipDecision);
+
+    const decisionSummary = getDecisions(
+      clipDecision.userId,
+      clipDecision.clipId,
+    );
+
+    return { ...state, decisionSummary };
+  }
+
+  throw new Error("Invalid Action");
+}
 /**
  *
  * To handle swapping in the next video without thrashing in resizing, and also to minimize lag when loading the video
  * we have two video tags running, with one hidden and the alternate being preloaded.
  */
 const DecideTouch = () => {
-  const clips = usePaginatedClipsFetcher();
-  const [clipA, setClipA] = useState<TouchClip>(clips.next().value);
-  const [clipB, setClipB] = useState<TouchClip>(clips.next().value);
-  const [currClip, setCurrClip] = useState<CurrClip>("A");
-  const [getDecisions, makeDecision] = useDecision();
   const authContext = useContext(AuthContext);
-  const [decisionSummary, setDecisionSummary] =
-    useState<DecisionSummary | null>(null);
+  const clips = usePaginatedClipsFetcher();
+  const [getDecisions, makeDecision] = useDecision();
 
-  const getCurrentClip = () => (currClip == "A" ? clipA : clipB);
-
-  const toggleCurrClip = () => {
-    const nextClip = currClip == "A" ? "B" : "A";
-    const prevClip = currClip;
-
-    setCurrClip(nextClip);
-
-    if (prevClip === "A") {
-      setClipA(clips.next().value);
-    } else {
-      setClipB(clips.next().value);
-    }
-  };
+  const [{ currClip, clipA, clipB, decisionSummary }, dispatch] = useReducer(
+    reducer,
+    initialState(getUserId(authContext), clips, getDecisions, makeDecision),
+  );
 
   const handleDecisionClick = (decision: Decision) => {
-    const clip = getCurrentClip();
-
-    // Report this decision to the server
-    const clipDecision: ClipDecision = {
-      decision,
-      clipId: clip.clipId,
-      userId: getUserId(authContext),
-    };
-
-    makeDecision(clipDecision);
-
-    setDecisionSummary(getDecisions(clipDecision.userId, clipDecision.clipId));
+    dispatch({ type: "make_decision", decision });
   };
 
   const handleNextClick = () => {
-    setDecisionSummary(null);
-    // Switch to the other clip and preload the next one
-    toggleCurrClip();
+    dispatch({ type: "toggle_curr_clip" });
   };
 
   /**
