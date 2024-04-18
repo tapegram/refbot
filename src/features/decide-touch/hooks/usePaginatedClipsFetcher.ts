@@ -1,16 +1,29 @@
+import { useEffect, useState } from "react";
 import { TouchClip } from "../domain";
 
-const usePaginatedClipsFetcher = () => {
-  return fetchClipsGenerator();
+const useClipsFetcher = () => {
+  const [clips, setClips] = useState<TouchClip[]>([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    const fetchData = async () => {
+      const resp = await fetch("https://api.refbot.pro/clips");
+      const data = await resp?.json();
+      setClips(
+        data?.clips.map((clipData: any) => ({
+          clipId: clipData.clipId,
+          clipUrl: clipData.clipUrl,
+        })) || [],
+      );
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  return { loading, clips };
 };
 
-export default usePaginatedClipsFetcher;
-
-function* fetchClipsGenerator(): Generator<TouchClip> {
-  while (true) {
-    yield getRandomTouch();
-  }
-}
+export default useClipsFetcher;
 
 /**
  * Should be eventually moved to the backend with dynamic list of values.
