@@ -25,7 +25,10 @@ const SignUp = () => {
       },
       body: JSON.stringify(inputs),
     };
-    const response = await fetch("https://api.refbot.pro/signup", options);
+    const response = await fetch(
+      "https://api.refbot.pro/auth/users/signup",
+      options,
+    );
     if (response.ok) {
       navigate("/");
     } else {

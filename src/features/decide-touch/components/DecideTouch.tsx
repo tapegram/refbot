@@ -148,19 +148,20 @@ const DecideTouch = () => {
     );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const resp = await fetch("https://api.refbot.pro/clips");
-      const data = await resp?.json();
-      dispatch({
-        type: "fetched_clips",
-        clips: data.map((clipData: any) => ({
-          clipId: clipData.id,
-          clipUrl: clipData.url,
-        })),
-      });
-    };
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    const resp = await fetch("https://api.refbot.pro/clips");
+    const data = await resp?.json();
+    dispatch({
+      type: "fetched_clips",
+      clips: data.map((clipData: any) => ({
+        clipId: clipData.id,
+        clipUrl: clipData.url,
+      })),
+    });
+  };
 
   const handleDecisionClick = (decision: Decision) => {
     dispatch({ type: "make_decision", decision });
