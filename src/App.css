@@ -71,3 +71,38 @@
   width: 100%;
   height: 100%;
 }
+
+.simple-form {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 100%;
+  margin-top: 2em;
+}
+
+.simple-form div {
+  min-width: 100%;
+  width: 100%;
+  margin: 1em 0;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.simple-form div label {
+  margin-right: 1em;
+}
+
+.simple-form .submitGroup {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.simple-form div input[type="submit"] {
+  padding: 1em 2em;
+  width: 60%;
+  justify-self: center;
+}

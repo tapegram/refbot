@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer } from "react";
+import { memo, useContext, useEffect, useReducer } from "react";
 import {
   ClipDecision,
   Decision,
@@ -245,4 +245,4 @@ const DecideTouchImpl = ({
   </div>
 );
 
-export default DecideTouch;
+export default memo(DecideTouch);
