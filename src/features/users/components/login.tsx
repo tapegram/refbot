@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type Inputs = {
   email: string;
@@ -16,10 +16,12 @@ const Login = () => {
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
   }
+
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const options = {
       method: "POST",
+      credentials: "include" as RequestCredentials,
       headers: {
         "Content-Type": "application/json",
       },
@@ -59,6 +61,9 @@ const Login = () => {
       </div>
       <div className="submitGroup">
         <input type="submit" value="Login" disabled={formErrors.length > 0} />
+      </div>
+      <div className="loginSignupSwitch">
+        <Link to="/signup">or sign up</Link>
       </div>
     </form>
   );

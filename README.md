@@ -16,8 +16,8 @@ The hope is that
 
 Currently implementing this entirely as a frontend app with no state, but providing hooks to wire in a real backend in the near future
 
+- Return user info on login/signup
 - Add more fine grained options for decisions
-- Login/signup flow
 - Consider more fine-grained decisions (None, is a pretty unhelpful catch-all)
 - Consider using a fun styled component library instead of just practicing CSS.
 - Move all of the fake frontend stuff to the backend
@@ -34,3 +34,4 @@ Currently implementing this entirely as a frontend app with no state, but provid
 - Update video flow to display summary info after making a decision and before moving to the next clip
 - Record use specific decisions
 - Display decisions compared to other users
+- Login/signup flow

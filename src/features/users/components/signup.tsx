@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type Inputs = {
   email: string;
@@ -53,12 +53,16 @@ const SignUp = () => {
           type="password"
           id="password"
           name="password"
+          autoComplete="current-password"
           required
           onChange={onChange}
         />
       </div>
       <div className="submitGroup">
         <input type="submit" value="Sign Up" disabled={formErrors.length > 0} />
+      </div>
+      <div className="loginSignupSwitch">
+        <Link to="/login">or login</Link>
       </div>
     </form>
   );

@@ -106,3 +106,11 @@
   width: 60%;
   justify-self: center;
 }
+
+.simple-form .loginSignupSwitch {
+  width: 100%;
+  margin-top: 0;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
