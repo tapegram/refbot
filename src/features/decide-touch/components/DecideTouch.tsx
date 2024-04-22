@@ -132,19 +132,13 @@ function* fetchClipsGenerator(clips: TouchClip[]): Generator<TouchClip> {
  * we have two video tags running, with one hidden and the alternate being preloaded.
  */
 const DecideTouch = () => {
-  const authContext = useContext(AuthContext);
+  const { status } = useContext(AuthContext);
   const [getDecisions, makeDecision] = useDecision();
 
   const [{ loading, currClip, clipA, clipB, decisionSummary }, dispatch] =
     useReducer(
       reducer,
-      initialState(
-        true,
-        getUserId(authContext),
-        null,
-        getDecisions,
-        makeDecision,
-      ),
+      initialState(true, getUserId(status), null, getDecisions, makeDecision),
     );
 
   useEffect(() => {
@@ -167,9 +161,7 @@ const DecideTouch = () => {
     dispatch({ type: "make_decision", decision });
   };
 
-  const handleNextClick = () => {
-    dispatch({ type: "toggle_curr_clip" });
-  };
+  const handleNextClick = () => {};
 
   /**
    * Here is where we duplicate the components so we can preload the next video and also prevent resizing/flashing on the screen when going to the next one

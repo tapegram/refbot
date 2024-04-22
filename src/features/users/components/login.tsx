@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../hooks/createAuthContext";
 
 type Inputs = {
   email: string;
@@ -10,6 +11,7 @@ const Login = () => {
   const [formErrors] = useState([]);
   const [inputs, setInputs] = useState<Inputs>({ email: "", password: "" });
   const navigate = useNavigate();
+  const { setStatus } = useContext(AuthContext);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const name = event.target.name;
@@ -32,6 +34,10 @@ const Login = () => {
       options,
     );
     if (response.ok) {
+      const user = await response.json();
+      setStatus({
+        id: user.id,
+      });
       navigate("/");
     } else {
       console.error("Failed to login");

@@ -1,7 +1,14 @@
-import { createContext } from "react";
+import { Dispatch, SetStateAction, createContext } from "react";
 import { AuthStatus } from "../domain";
 
-const initialAuthContext: AuthStatus = "anonymous";
-const AuthContext = createContext<AuthStatus>(initialAuthContext);
+const initialAuthContext: AuthState = {
+  status: "anonymous",
+  setStatus: () => {},
+};
+type AuthState = {
+  status: AuthStatus;
+  setStatus: Dispatch<SetStateAction<AuthStatus>>;
+};
+const AuthContext = createContext<AuthState>(initialAuthContext);
 
 export default AuthContext;

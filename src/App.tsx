@@ -5,15 +5,15 @@ import Home from "./pages/Home";
 import { BrowserRouter as DataRouter, Routes, Route } from "react-router-dom";
 import SignupPage from "./pages/Signup";
 import LoginPage from "./pages/Login";
+import { AuthStatus } from "./features/users/domain";
 
 function App() {
-  const [authContext] = useState({
-    id: "test_user_id_1",
-    email: "test@test.com",
-  });
+  const [authStatus, setAuthStatus] = useState<AuthStatus>("anonymous");
 
   return (
-    <AuthContext.Provider value={authContext}>
+    <AuthContext.Provider
+      value={{ status: authStatus, setStatus: setAuthStatus }}
+    >
       <DataRouter>
         <Routes>
           <Route path="/" element={<Home />} />
